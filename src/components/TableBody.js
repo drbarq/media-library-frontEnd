@@ -6,13 +6,14 @@ export default function TableBody(props) {
         <tbody>
         {
           props.displayedPodcasts.map(podcast => {
+            // debugger;
             return(
               <tr key={podcast.id}>
                 <td>{podcast.showName}</td>
                 <td>{podcast.episodeName}</td>
                 <td>{podcast.comment}</td>
                 <td>{podcast.url}</td>
-                <td>{props.getUserID(podcast.user_id)}</td>
+                <td>{props.getUserID(podcast.user_group_id)}</td>
 
                 <td>
                   <button>

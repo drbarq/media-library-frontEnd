@@ -23,8 +23,9 @@ export default class AddNewPodcastForm extends Component {
           episodeName: this.state.newPodcast.episodeName,
           url: this.state.newPodcast.url,
           comment: this.state.newPodcast.comment,
-          user_id: props.currentUser
+          user_id: this.props.currentUser.id 
         }
+        debugger
         this.postNewPodcast(newPodcast)
     }
 
