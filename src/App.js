@@ -5,8 +5,6 @@ import HeaderElements from './components/HeaderElements';
 import TableHeader from './components/TableHeader';
 import TableBody from './components/TableBody';
 import AddNewPodcastForm from './components/AddNewPodcastForm';
-
-
 const usersURL = "https://secret-gorge-82811.herokuapp.com/users"
 
 
@@ -16,7 +14,6 @@ export default class App extends Component {
     super()
     this.state = {
       users: [],
-      // currentUser: '',
       currentUser: [],
       userTeams: [],
       teamSelection: '',
