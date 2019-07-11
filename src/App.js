@@ -5,10 +5,8 @@ import HeaderElements from './components/HeaderElements';
 import TableHeader from './components/TableHeader';
 import TableBody from './components/TableBody';
 import AddNewPodcastForm from './components/AddNewPodcastForm';
-// import PodcastPlane from "./components/PodcastPlane"
-// const groupPodcastURL = "https://secret-gorge-82811.herokuapp.com/groups/1/podcasts"
-// const groupUsers = "https://secret-gorge-82811.herokuapp.com/groups/1/users"
-// const baseURL = "https://secret-gorge-82811.herokuapp.com/"
+
+
 const usersURL = "https://secret-gorge-82811.herokuapp.com/users"
 
 
@@ -69,36 +67,17 @@ export default class App extends Component {
     this.fetchGroupData(event.target.value)
   }
 
-  // displayedPodcasts = () => {
-  //   return this.state.podcasts
-  // }
+  filterUsers = userID => {
+    return this.state.teamUsers.filter(user => {
+      return user.id === userID
+    })
+  }
 
- 
-// this function doesnt work I need to filter over an object 
-
-  // formatUserId = (userID) => {
-  //   let userIndex = (userID - 1)
-  //   Object.filter = (obj, predicate) => 
-  //     Object.assign(...Object.keys(obj)
-  //                   .filter( key => predicate(obj[key]) )
-  //                   .map( key => ({ [key]: obj[key] }) ) );
-
-  
-
-  //   this.state.teamUsers.filter(user.id => {
-  //     return 
-  //   })
-
-  //   // console.log(userID)
-  //   console.log(userID)
-  //   console.log(this.state.users[userID])
-  //   console.log(userIndex)
-  //   console.log(this.state.users[userIndex])
-
-  //   // debugger;
-  //   // return this.state.users[userID].name 
-  // }
-
+  getUserID = userID => {
+    let usersName = this.filterUsers(userID)[0].name
+    return usersName
+  }
+        
   teamUsers = () => {
     return this.state.teamUsers
   }
@@ -116,7 +95,7 @@ export default class App extends Component {
         <HeaderElements updateCurrentUser={this.updateCurrentUser} teamUsers={this.state.teamUsers} podcasts={this.state.podcasts} allUsers={this.state.users} updateTeamSelection={this.updateTeamSelection} userTeams={this.state.userTeams}/>
         <table className="podcast-table">
           <TableHeader />
-          <TableBody displayedPodcasts={this.state.podcasts} formatUserId={this.formatUserId}/>
+          <TableBody displayedPodcasts={this.state.podcasts} formatUserId={this.formatUserId} filterUsers={this.filterUsers} getUserID={this.getUserID}/>
         </table>
         <AddNewPodcastForm optimisticRenderPodcast={this.optimisticRenderPodcast} currentUser={this.state.currentUser}/>
       </React.Fragment>

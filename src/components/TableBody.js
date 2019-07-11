@@ -12,8 +12,7 @@ export default function TableBody(props) {
                 <td>{podcast.episodeName}</td>
                 <td>{podcast.comment}</td>
                 <td>{podcast.url}</td>
-                {/* <td>{props.formatUserId(podcast.user_id)}</td> */}
-                <td>{podcast.user_id}</td>
+                <td>{props.getUserID(podcast.user_id)}</td>
 
                 <td>
                   <button>
