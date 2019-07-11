@@ -37,7 +37,10 @@ export default function HeaderElements(props) {
                     <p>Number of Podcasts Submitted: {props.podcasts.length}</p>
                 </div>
                 <div className="user-info">
-                    <h4>User Information</h4>
+                    <h4>User Information </h4>
+                    <p>Name: {props.currentUser.name}</p>
+                    <p>Email: {props.currentUser.email}</p>
+                    <p>Member of {props.userTeams.length} Teams</p>
                 </div>
             </div>  
 

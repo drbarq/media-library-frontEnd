@@ -16,7 +16,8 @@ export default class App extends Component {
     super()
     this.state = {
       users: [],
-      currentUser: '',
+      // currentUser: '',
+      currentUser: [],
       userTeams: [],
       teamSelection: '',
       podcasts: [],
@@ -54,8 +55,9 @@ export default class App extends Component {
 
   updateCurrentUser = event => {
     event.preventDefault()
+    let userInfo = this.filterAllUsers(event.target.value)[0]
     this.setState({
-      currentUser: event.target.value
+      currentUser: userInfo
     })
     this.fetchUserTeams(event.target.value)
   }
@@ -77,7 +79,13 @@ export default class App extends Component {
     let usersName = this.filterUsers(userID)[0].name
     return usersName
   }
-        
+
+  filterAllUsers = currentUserId => {
+    return this.state.users.filter(user => {
+      return user.id === Number(currentUserId)
+    })
+  }
+
   teamUsers = () => {
     return this.state.teamUsers
   }
@@ -92,7 +100,7 @@ export default class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <HeaderElements updateCurrentUser={this.updateCurrentUser} teamUsers={this.state.teamUsers} podcasts={this.state.podcasts} allUsers={this.state.users} updateTeamSelection={this.updateTeamSelection} userTeams={this.state.userTeams}/>
+        <HeaderElements updateCurrentUser={this.updateCurrentUser} teamUsers={this.state.teamUsers} podcasts={this.state.podcasts} allUsers={this.state.users} updateTeamSelection={this.updateTeamSelection} userTeams={this.state.userTeams} currentUser={this.state.currentUser}/>
         <table className="podcast-table">
           <TableHeader />
           <TableBody displayedPodcasts={this.state.podcasts} formatUserId={this.formatUserId} filterUsers={this.filterUsers} getUserID={this.getUserID}/>
