@@ -13,7 +13,7 @@ body {
   font-family: Roboto, sans-serif;
   max-width: 900px;
   padding: 2rem;
-  border: 1px solid #ccc
+  border: 1px solid #ccc;
 }
 
 form select {
@@ -21,7 +21,14 @@ form select {
   border: 1px solid #ccc;
 }
 
-.team-and-user-control {
+.state-control {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.team-and-user-info {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -54,6 +61,29 @@ th, td {
 .podcast-table thead {
   border-bottom: 1px solid #ccc;
 }
+
+.new-podcast-inputs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.new-podcast-inputs input {
+  padding: 0.25rem 0.25rem;
+}
+
+.edit-podcast-inputs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.edit-podcast-inputs input {
+  padding: 0.25rem 0.25rem;
+}
+
 
 
 

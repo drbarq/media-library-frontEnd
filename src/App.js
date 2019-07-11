@@ -1,193 +1,124 @@
 import React,  {Component} from 'react';
+import 'font-awesome/css/font-awesome.min.css'
 import './App.css';
+import HeaderElements from './components/HeaderElements';
+import TableHeader from './components/TableHeader';
+import TableBody from './components/TableBody';
+import AddNewPodcastForm from './components/AddNewPodcastForm';
 // import PodcastPlane from "./components/PodcastPlane"
-const groupPodcastURL = "https://secret-gorge-82811.herokuapp.com/groups/1/podcasts"
-const groupUsers = "https://secret-gorge-82811.herokuapp.com/groups/1/users"
+// const groupPodcastURL = "https://secret-gorge-82811.herokuapp.com/groups/1/podcasts"
+// const groupUsers = "https://secret-gorge-82811.herokuapp.com/groups/1/users"
 // const baseURL = "https://secret-gorge-82811.herokuapp.com/"
-const podcastURL = "https://secret-gorge-82811.herokuapp.com/podcasts"
+const usersURL = "https://secret-gorge-82811.herokuapp.com/users"
+
 
 
 export default class App extends Component {
   constructor() {
     super()
     this.state = {
+      users: [],
+      currentUser: '',
+      userTeams: [],
       teamSelection: '',
       podcasts: [],
       teamUsers: [],
-      newPodcast: {
-        showName: "",
-        episodeName: "",
-        url: "",
-        comment: "",
-        user_id: ""
-    }
     }
   }
 
   componentDidMount() {
-    fetch(groupPodcastURL)
+    fetch(usersURL)
       .then(results => results.json())
-      .then(podcasts => this.setState({podcasts}))
-      .catch(error => console.error(error))
-    fetch(groupUsers)
-      .then(results => results.json())
-      .then(teamUsers => this.setState({teamUsers}))
+      .then(users => this.setState({users}))
       .catch(error => console.error(error))
   }
 
-  updateFilterCategory = event => {
+  fetchUserTeams = (id) => {
+    let userTeams = `https://secret-gorge-82811.herokuapp.com/users/${id}/groups`
+    fetch(userTeams)
+      .then(results => results.json())
+      .then(userTeams => this.setState({userTeams}))
+      .catch(error => console.error(error))
+  }
+
+  fetchGroupData = (id) => {
+    let groupPodcastURL = `https://secret-gorge-82811.herokuapp.com/groups/${id}/podcasts`
+    let groupUsersURL = `https://secret-gorge-82811.herokuapp.com/groups/${id}/users`
+    fetch(groupUsersURL)
+      .then(response => response.json())
+      .then(teamUsers => this.setState({teamUsers}))
+      .catch(error => console.error(error))
+    fetch(groupPodcastURL)
+      .then(response => response.json())
+      .then(podcasts => this.setState({podcasts}))
+      .catch(error => console.error(error))
+  }
+
+  updateCurrentUser = event => {
+    event.preventDefault()
+    this.setState({
+      currentUser: event.target.value
+    })
+    this.fetchUserTeams(event.target.value)
+  }
+
+  updateTeamSelection = event => {
     this.setState({
       teamSelection: event.target.value
     })
+    this.fetchGroupData(event.target.value)
   }
 
-  displayedPodCasts = () => {
-    return this.state.podcasts
-  }
+  // displayedPodcasts = () => {
+  //   return this.state.podcasts
+  // }
+
+ 
+// this function doesnt work I need to filter over an object 
+
+  // formatUserId = (userID) => {
+  //   let userIndex = (userID - 1)
+  //   Object.filter = (obj, predicate) => 
+  //     Object.assign(...Object.keys(obj)
+  //                   .filter( key => predicate(obj[key]) )
+  //                   .map( key => ({ [key]: obj[key] }) ) );
+
+  
+
+  //   this.state.teamUsers.filter(user.id => {
+  //     return 
+  //   })
+
+  //   // console.log(userID)
+  //   console.log(userID)
+  //   console.log(this.state.users[userID])
+  //   console.log(userIndex)
+  //   console.log(this.state.users[userIndex])
+
+  //   // debugger;
+  //   // return this.state.users[userID].name 
+  // }
 
   teamUsers = () => {
     return this.state.teamUsers
   }
 
-  postNewPodcast = newPodcast => {
+  optimisticRenderPodcast = (newPodcast) => {
     this.setState(state => {
       state.podcasts = [...state.podcasts, newPodcast]
       return state
     })
-    fetch(podcastURL, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(newPodcast)
-    }).catch(error => console.error(error.message))
   }
-
-  updateNewPodcast = event => {
-    const key = event.target.name
-    const value = event.target.value
-    this.setState(state => {
-      state.newPodcast[key] = value
-      return state
-    })
-  }
-
-  // Podcast.create(episodeName: 'worst cast', showName: 'not me', url: 'www.aol.com', comment: 'good', user: joe)
-
-  addNewPodcast = event => {
-    event.preventDefault()
-    const newPodcast = {
-      showName: this.state.newPodcast.showName,
-      episodeName: this.state.newPodcast.episodeName,
-      url: this.state.newPodcast.url,
-      comment: this.state.newPodcast.comment,
-      user_id: this.state.newPodcast.user_id
-    }
-    this.postNewPodcast(newPodcast)
-  }
-
-
 
   render() {
     return (
       <React.Fragment>
-        <header>
-          <h1>The Media Library</h1>
-            <div className="team-and-user-control">
-              {/* <Search searchTerm={this.state.searchTerm} updateSearchTerm={this.updateSearchTerm}/> */}
-              <form className="Team-Selection">
-                <select name="filter-team" onChange={this.updateFilterCategory} >
-                  <option defaultValue="selectTeam" >Please Select a Team</option>
-                  <option value="Team1">Show Only Team 1</option>
-                  <option value="Team2">Show Only Team2</option>
-                </select>
-              </form >
-              <div className="team-user-info">
-                <h4>Team Stats</h4>
-                <p>Number of Members: {this.state.teamUsers.length}</p>
-                <p>Number of Podcasts Submitted: {this.state.podcasts.length}</p>
-              </div>
-              <div className="user-info">
-                <h4>User Information</h4>
-              </div>
-            </div>  
-        </header>
+        <HeaderElements updateCurrentUser={this.updateCurrentUser} teamUsers={this.state.teamUsers} podcasts={this.state.podcasts} allUsers={this.state.users} updateTeamSelection={this.updateTeamSelection} userTeams={this.state.userTeams}/>
         <table className="podcast-table">
-            <thead>
-              <tr key="info-header">
-                <th>Show Name</th>
-                <th>Episode Name</th>
-                <th>User Comments</th>
-                <th>URL</th>
-                <th>Submitted By:</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                this.displayedPodCasts().map(podcast => {
-                  return(
-                    <tr key={podcast.id}>
-                      <td>{podcast.showName}</td>
-                      <td>{podcast.episodeName}</td>
-                      <td>{podcast.comment}</td>
-                      <td>{podcast.url}</td>
-                      <td>{podcast.user_id}</td>
-                    </tr>
-                  )
-                })
-              }
-            </tbody>
-          </table>
-          <form onSubmit={this.addNewPodcast} className="add-new-podcast">
-                <h2>Add New Podcast</h2>
-                <input 
-                    onChange={this.updateNewPodcast} 
-                    required 
-                    type="text" 
-                    name="showName" 
-                    placeholder="Show Name" 
-                    value={this.state.newPodcast.showName}
-                />
-                <input 
-                    onChange={this.updateNewPodcast}  
-                    required 
-                    type="text" 
-                    name="episodeName" 
-                    placeholder="Episode Name" 
-                    value={this.state.newPodcast.episodeName}
-                />
-                <input 
-                    onChange={this.updateNewPodcast}  
-                    required 
-                    type="text" 
-                    name="comment" 
-                    placeholder="Comments about the show" 
-                    value={this.state.newPodcast.comment}
-                />
-                <input 
-                    onChange={this.updateNewPodcast}  
-                    required 
-                    type="text" 
-                    name="url" 
-                    placeholder="Link to the Podcast" 
-                    value={this.state.newPodcast.url}
-                />
-                <input 
-                    onChange={this.updateNewPodcast}  
-                    required 
-                    type="text" 
-                    name="user_id" 
-                    placeholder="User ID" 
-                    value={this.state.newPodcast.user_id}
-                />
-                {/* <select onChange={this.updateNewPerson} required name="role" value={this.state.newPerson.role}>
-                    <option value="Please Select" selected disabled={true}>Please Select a Role</option>
-                    <option value="student">Student</option>
-                    <option value="teacher">Teacher</option>
-                    <option value="administrator">Administrator</option>
-                </select> */}
-                <input type="submit" value="Add Podcast" /> 
-            </form>
+          <TableHeader />
+          <TableBody displayedPodcasts={this.state.podcasts} formatUserId={this.formatUserId}/>
+        </table>
+        <AddNewPodcastForm optimisticRenderPodcast={this.optimisticRenderPodcast} currentUser={this.state.currentUser}/>
       </React.Fragment>
     )
   }
