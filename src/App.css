@@ -47,19 +47,30 @@ form select {
 .podcast-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .podcast-table th {
   text-align: left;
   margin-bottom: 2rem;
+  width: 70px;
+  word-wrap: break-word;
+  overflow: hidden;
 }
 
 th, td {
   padding: 0.5rem 0.25rem;
+  width: 50px;
+  word-wrap: anywhere;
 }
 
 .podcast-table thead {
   border-bottom: 1px solid #ccc;
+  /* width: 20px; */
+  /* table-layout: fixed; */
+  /* width: 50px; */
+
+
 }
 
 .new-podcast-inputs {

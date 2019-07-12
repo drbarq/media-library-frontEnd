@@ -7,8 +7,6 @@ import TableBody from './components/TableBody';
 import AddNewPodcastForm from './components/AddNewPodcastForm';
 const usersURL = "https://secret-gorge-82811.herokuapp.com/users"
 
-
-
 export default class App extends Component {
   constructor() {
     super()
@@ -53,6 +51,7 @@ export default class App extends Component {
     fetch(groupUserGroupsURL)
       .then(response => response.json())
       .then(userGroupsAcc => this.setState({userGroupsAcc}))
+      .catch(error => console.error(error))
   } 
 
   updateCurrentUser = event => {
@@ -73,25 +72,36 @@ export default class App extends Component {
     this.fetchGroupData(event.target.value)
   }
 
-  filterUserGroupsAcc = user_group_id => {
-    return this.state.userGroupsAcc.filter(userGroupsAcc => {
+  filterUserGroupsAcc = user_group_acc_id => {
+    let userGroupsAcc = this.state.userGroupsAcc
+    return userGroupsAcc.filter(userGroupsAcc => {
       // debugger
-      return userGroupsAcc.id === user_group_id
+      return userGroupsAcc.id === user_group_acc_id
     })
   }
 
-  getUserID = user_group_id => {
+  getUserID = user_group_acc_id => {
     // debugger
-    let user_id = this.filterUserGroupsAcc(user_group_id)[0].user_id
+    let user_id = this.filterUserGroupsAcc(user_group_acc_id)[0].user_id
     // debugger;
-    let user_name = this.filterAllUsers(user_id)[0].name
+    let user_name = this.filterUsers(user_id)[0].name
     // debugger;
     return user_name
   }
 
   filterAllUsers = currentUserId => {
-    return this.state.users.filter(user => {
+    let users = this.state.users
+    return users.filter(user => {
       return user.id === Number(currentUserId)
+      // return user.id === currentUserId
+    })
+  }
+
+  filterUsers = currentUserId => {
+    let users = this.state.users
+    return users.filter(user => {
+      // return user.id === Number(currentUserId)
+      return user.id === currentUserId
     })
   }
 
@@ -114,7 +124,7 @@ export default class App extends Component {
           <TableHeader />
           <TableBody displayedPodcasts={this.state.podcasts} formatUserId={this.formatUserId} filterUsers={this.filterUsers} getUserID={this.getUserID}/>
         </table>
-        <AddNewPodcastForm optimisticRenderPodcast={this.optimisticRenderPodcast} currentUser={this.state.currentUser}/>
+        <AddNewPodcastForm optimisticRenderPodcast={this.optimisticRenderPodcast} currentUser={this.state.currentUser} groupSelection={Number(this.state.groupSelection)}/>
       </React.Fragment>
     )
   }
