@@ -60,12 +60,10 @@ export default class App extends Component {
     this.setState({
       currentUser: userInfo
     })
-    console.log(event.target.value)
     this.fetchUserGroups(event.target.value)
   }
 
   updateGroupSelection = event => {
-    // debugger;
     this.setState({
       groupSelection: event.target.value
     })
@@ -75,7 +73,6 @@ export default class App extends Component {
   filterUserGroupsAcc = user_group_acc_id => {
     let userGroupsAcc = this.state.userGroupsAcc
     return userGroupsAcc.filter(userGroupsAcc => {
-      // debugger
       return userGroupsAcc.id === user_group_acc_id
     })
   }

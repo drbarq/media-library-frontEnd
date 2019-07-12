@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
-const podcastURL = "https://secret-gorge-82811.herokuapp.com/podcasts"
-const userGroupsURL = "https://secret-gorge-82811.herokuapp.com/user_groups"
+// const podcastURL = "https://secret-gorge-82811.herokuapp.com/podcasts"
+// const userGroupsURL = "https://secret-gorge-82811.herokuapp.com/user_groups"
+const userGroupsURL = "http://localhost:3000/user_groups"
+const podcastURL = "http://localhost:3000/podcasts"
 
  
 export default class AddNewPodcastForm extends Component {
@@ -17,7 +19,9 @@ export default class AddNewPodcastForm extends Component {
             newUserGroups: {
                 user_id: 0,
                 group_id: 0
-            }
+            },
+            response: {},
+            user_groups: ""
         }
     }
 
@@ -32,18 +36,26 @@ export default class AddNewPodcastForm extends Component {
         }
     }
 
-    addNewPodcast = (event, props) => {
-        event.preventDefault()
-        const newPodcast = {
-          showName: this.state.newPodcast.showName,
-          episodeName: this.state.newPodcast.episodeName,
-          url: this.state.newPodcast.url,
-          comment: this.state.newPodcast.comment,
-          user_groups: this.state.user_groups
-        }
-        // debugger
-        this.postNewPodcast(newPodcast)
-    }
+    // componentDidMount(prevstate) {
+    //     // debugger
+    //     if(prevstate.user_groups !== this.state.user_groups) {
+    //         this.setState({
+    //             user_groups: this.state.response.id
+    //         })
+    //     }
+    // }
+  
+// idk what to do here 
+    // saveNewPodCast = () => {
+    //     const newPodcast = {
+    //         showName: this.state.newPodcast.showName,
+    //         episodeName: this.state.newPodcast.episodeName,
+    //         url: this.state.newPodcast.url,
+    //         comment: this.state.newPodcast.comment,
+    //         user_groups: this.state.user_groups
+    //       }
+    //     return newPodcast
+    // }
 
     setNewPodcast = event => {
         const key = event.target.name
@@ -52,10 +64,39 @@ export default class AddNewPodcastForm extends Component {
           state.newPodcast[key] = value
           return state
         })
-      }
+    }
 
-    postNewPodcast = (newPodcast, props) => {
-        props.optimisticRenderPodcast(newPodcast)        
+
+    addNewPodcast = (event, props) => {
+        event.preventDefault()
+        fetch(this.postNewGroupUser(event))
+            this.postNewPodcast()
+        
+
+        // const newPodcast = {
+        //   showName: this.state.newPodcast.showName,
+        //   episodeName: this.state.newPodcast.episodeName,
+        //   url: this.state.newPodcast.url,
+        //   comment: this.state.newPodcast.comment,
+        //   user_groups: this.state.user_groups
+        // }
+        // debugger;
+        // console.log(this.saveNewPodCast())
+            // this.props.optimisticRenderPodcast(this.saveNewPodCast())
+            
+    }
+
+    // the user group can post but the posting new podcast wont wait
+
+    postNewPodcast = () => {
+        const newPodcast = {
+            showName: this.state.newPodcast.showName,
+            episodeName: this.state.newPodcast.episodeName,
+            url: this.state.newPodcast.url,
+            comment: this.state.newPodcast.comment,
+            user_groups: this.state.user_groups
+        }
+        console.log(newPodcast)
         fetch(podcastURL, {
           method: 'POST',
           headers: {
@@ -63,15 +104,13 @@ export default class AddNewPodcastForm extends Component {
           },
           body: JSON.stringify(newPodcast)
         })
-        .then(response => console.log(response))
+        .then(response => response.json())
+        .then(result => console.log(result))
         .catch(error => console.error(error.message))
     }
 
-    postNewGroupUser = (event, props) => {
+    postNewGroupUser = event => {
         event.preventDefault()
-        // debugger
-        this.setNewUserGroup()
-        debugger
         fetch(userGroupsURL, {
             method: 'POST',
             headers: {
@@ -79,42 +118,15 @@ export default class AddNewPodcastForm extends Component {
             },
             body: JSON.stringify(this.state.newUserGroups)
           })
-          .then(response => console.log(response))
+          .then(response => response.json())
+          .then(response => this.setState({user_groups: response.id}))
           .catch(error => console.error(error.message))
     }
 
-    // setNewUserGroup = (props) => {
-    //     debugger
-    //    this.setState(state => {
-    //         newUserGroups: {
-    //             user_id: this.props.currentUser.id,
-    //             group_id: parseInt(this.props.groupSelection)
-    //         }
-    //         return state
-    //     })
-    // }
-
-
-    // componentDidMount(props) {
-    //     this.setNewUserGroup(props)
-    // }
-
-
-    setNewUserGroup = (props) => {
-        debugger
-        this.setState({
-                user_id: this.props.currentUser,
-                group_id: this.props.groupSelection
-        })
-    }
-
-                // <form onSubmit={this.addNewPodcast} className="add-new-podcast">
-            // <form onSubmit={(event) => this.postNewGroupUser(event)} className="add-new-podcast">
-
     render() {
         return (
-
-            <form onSubmit={event => this.postNewGroupUser(event)} className="add-new-podcast">
+            <form onSubmit={(event) => this.addNewPodcast(event)} className="add-new-podcast">
+            {/* <form onSubmit={event => this.postNewGroupUser(event)} className="add-new-podcast"> */}
                 <h2>Add New Podcast</h2>
                 <div className="new-podcast-inputs">
                     <input 
