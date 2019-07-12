@@ -43,7 +43,6 @@ export default function HeaderElements(props) {
                     <p>Member of {props.userGroups.length} Teams</p>
                 </div>
             </div>  
-
         </header>
     )
 }

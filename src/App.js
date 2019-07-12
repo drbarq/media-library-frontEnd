@@ -78,11 +78,8 @@ export default class App extends Component {
   }
 
   getUserID = user_group_acc_id => {
-    // debugger
     let user_id = this.filterUserGroupsAcc(user_group_acc_id)[0].user_id
-    // debugger;
     let user_name = this.filterUsers(user_id)[0].name
-    // debugger;
     return user_name
   }
 
@@ -90,14 +87,12 @@ export default class App extends Component {
     let users = this.state.users
     return users.filter(user => {
       return user.id === Number(currentUserId)
-      // return user.id === currentUserId
     })
   }
 
   filterUsers = currentUserId => {
     let users = this.state.users
     return users.filter(user => {
-      // return user.id === Number(currentUserId)
       return user.id === currentUserId
     })
   }

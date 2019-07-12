@@ -29,7 +29,4 @@ export default function TableBody(props) {
         }
         </tbody>
     )
-
-
-
 }
